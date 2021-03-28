@@ -1,25 +1,91 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{Component} from "react";
+import TodosList from "./Components/TodoList"
+import CreateTodo from "./Components/CreateTodos";
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const todos = {
+    items: [],
+    lsKey: "todos",
+    populate () {
+        this.items = this.get();
+    },
+    get () {
+        try {
+            return JSON.parse(localStorage.getItem(this.lsKey)) || []
+        } catch (e) {}
+        return [];
+    },
+    save () {
+        localStorage.setItem(this.lsKey, JSON.stringify(this.items));
+    },
+    toggle (id) {
+        let todoItem = this.items[id];
+        todoItem.isCompleted = !todoItem.isCompleted;
+        this.save();
+    },
+    add (obj) {
+        this.items.push(obj);
+        this.save();
+    },
+    remove (id) {
+        this.items.splice(id, 1);
+        this.save();
+    },
+    update (id, task) {
+        let todoItem = this.items[id];
+        todoItem.task = task;
+        this.save();
+    }
+};
+
+todos.populate();
+
+
+export default class App extends Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            todos: todos.items
+        };
+    }
+    render () {
+        return (
+            <div>
+                <h1>TODOs</h1>
+                <CreateTodo
+                    createTask={this.createTask.bind(this)}
+                />
+                <TodosList
+                    todos={this.state.todos}
+                    toggleTask={(e)=>this.toggleTask(e)}
+                    editTask={this.editTask.bind(this)}
+                    deleteTask={(e)=>this.deleteTask(e)}
+                />
+            </div>
+        );
+    }
+
+    createTask (task) {
+        console.log(task)
+        task = task.trim();
+        if (!task) { return; }
+        todos.add({
+            task,
+            isCompleted: false
+        });
+        this.setState({ todos: this.state.todos });
+    }
+
+    toggleTask (taskId) {
+        todos.toggle(taskId);
+        this.setState({ todos: this.state.todos });
+    }
+    editTask (taskId, task) {
+        todos.update(taskId, task);
+        this.setState({ todos: this.state.todos });
+    }
+    deleteTask (taskId) {
+        todos.remove(taskId);
+        this.setState({ todos: this.state.todos });
+    }
 }
-
-export default App;
