@@ -91,6 +91,9 @@ form.create-todo-form {
 form.create-todo-form input {
     width: calc(100% - 50px);
 }
+i{
+    color: blue;
+}
 
 
 tr.todo-not-completed td:first-of-type {

@@ -1,9 +1,9 @@
-import React,{Component} from "react";
+import React from "react";
 
-export default class CreateTodo extends Component {
+export default class CreateTodo extends React.Component {
     render () {
         return (
-            <form onSubmit={(e)=>this.onSubmit(e)} className="create-todo-form">
+            <form onSubmit={this.onSubmit.bind(this)} className="create-todo-form">
                 <input type="text" placeholder="Task" ref="taskMessage" autoFocus/>
                 <button>Add</button>
             </form>

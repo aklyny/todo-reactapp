@@ -14,7 +14,7 @@ export default class TodosListItem extends Component {
             return (
                 <td>
                     <button onClick={()=>this.editTask()}>Save</button>
-                    <button className="cancel-btn" onClick={()=>this.setEditState(false)}>Cancel</button>
+                    <button className="cancel-btn" onClick={this.setEditState.bind(this,false)}>Cancel</button>
                 </td>
             );
         }
@@ -65,7 +65,9 @@ export default class TodosListItem extends Component {
         
 
         return (
+            <>
             <td onClick={()=>this.toggleTask(task.id)} style={taskStyle}>{task}</td>
+            </>
         );
     }
 

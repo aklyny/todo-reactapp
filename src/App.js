@@ -1,4 +1,4 @@
-import React,{Component} from "react";
+import React from "react";
 import TodosList from "./Components/TodoList"
 import CreateTodo from "./Components/CreateTodos";
 import './App.css'
@@ -41,9 +41,10 @@ const todos = {
 todos.populate();
 
 
-export default class App extends Component {
+export default class App extends React.Component {
     constructor (props) {
         super(props);
+
         this.state = {
             todos: todos.items
         };
@@ -57,16 +58,15 @@ export default class App extends Component {
                 />
                 <TodosList
                     todos={this.state.todos}
-                    toggleTask={(e)=>this.toggleTask(e)}
+                    toggleTask={this.toggleTask.bind(this)}
                     editTask={this.editTask.bind(this)}
-                    deleteTask={(e)=>this.deleteTask(e)}
+                    deleteTask={this.deleteTask.bind(this)}
                 />
             </div>
         );
     }
 
     createTask (task) {
-        console.log(task)
         task = task.trim();
         if (!task) { return; }
         todos.add({
